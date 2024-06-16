@@ -1,0 +1,84 @@
+Map
+*MainActivity.java
+import android.os.Bundle;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+private GoogleMap mMap;
+private double latitude = 0.0;
+private double longitude = 0.0;
+@Override
+protected void onCreate(Bundle savedInstanceState) {
+super.onCreate(savedInstanceState);
+setContentView(R.layout.activity_main);
+// Obtain the SupportMapFragment and get notified when the map is ready to be used.
+SupportMapFragment mapFragment = (SupportMapFragment)
+getSupportFragmentManager()
+.findFragmentById(R.id.map);
+if (mapFragment != null) {
+mapFragment.getMapAsync(this);
+} else {
+Toast.makeText(this, "Map Fragment Not Found", Toast.LENGTH_SHORT).show();
+}
+}
+@Override
+public void onMapReady(@NonNull GoogleMap googleMap) {
+mMap = googleMap;
+// Add a marker at current or given location and move the camera
+LatLng location = new LatLng(latitude, longitude);
+mMap.addMarker(new MarkerOptions().position(location).title("Marker"));
+mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+}
+}
+
+*activity_main.xml
+<?xml version="1.0" encoding="utf8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context=".MainActivity">
+<fragment
+android:id="@+id/map"
+android:name="com.google.android.gms.maps.SupportMapFragment"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:layout_alignParentTop="true"
+android:layout_alignParentBottom="true"
+android:layout_alignParentStart="true"
+android:layout_alignParentEnd="true" />
+</RelativeLayout>
+
+*AndroidManifest.xml
+<?xml version="1.0" encoding="utf8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+package="com.yourpackage.yourappname">
+<usespermission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<usespermission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<usespermission android:name="android.permission.INTERNET" />
+<application
+android:allowBackup="true"
+android:icon="@mipmap/ic_launcher"
+android:label="@string/app_name"
+android:roundIcon="@mipmap/ic_launcher_round"
+android:supportsRtl="true"
+android:theme="@style/AppTheme">
+<! Google Maps API Key >
+<metadata
+android:name="com.google.android.geo.API_KEY"
+android:value="YOUR_API_KEY_HERE" />
+<activity android:name=".MainActivity">
+<intentfilter>
+<action android:name="android.intent.action.MAIN" />
+<category android:name="android.intent.category.LAUNCHER" />
+</intentfilter>
+</activity>
+</application>
+</manifest>
